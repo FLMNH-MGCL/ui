@@ -1,23 +1,22 @@
 import clsx from 'clsx';
 import React from 'react';
+import { PropsOf } from 'types';
 import { TEXT } from './constants';
 
 type Props = {
   variant?: keyof typeof TEXT;
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  children: React.ReactText;
-  className?: string;
   centered?: boolean;
   onClick?(): void;
-};
+} & PropsOf<'p'>;
 
 export default function Text({
   centered,
-  children,
   variant = 'subtext',
   size = 'sm',
   className,
   onClick,
+  ...props
 }: Props) {
   const textStyle = TEXT[variant] || TEXT.subtext;
 
@@ -30,8 +29,7 @@ export default function Text({
         className
       )}
       onClick={onClick}
-    >
-      {children}
-    </p>
+      {...props}
+    />
   );
 }

@@ -5,12 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import OutsideClickHandler from 'react-outside-click-handler';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
-import {
-  SelectOption,
-  SelectBadgeProps,
-  UISelectProps,
-  SelectProps,
-} from 'types';
+import { SelectBadgeProps, SelectOption, SelectProps } from 'types';
 
 function SelectedBadge({ label, onDelete }: SelectBadgeProps) {
   return (
@@ -63,6 +58,18 @@ function SelectItem({ label, selected, onSelect }: SelectItemProps) {
     </li>
   );
 }
+
+type UISelectProps = {
+  slim?: boolean;
+  multiple?: boolean;
+  errors: any; // TODO: type me
+  display: SelectOption | SelectOption[] | undefined;
+  options: SelectOption[];
+  disabled?: boolean;
+  onSelect(item?: SelectOption): void;
+  calculateSelected(item: SelectOption): boolean;
+  placeholder?: string;
+};
 
 function UISelect({
   slim,
@@ -201,7 +208,6 @@ function UISelect({
 }
 
 // I do not like the way I allow controllable forms here. I need to do more research into this
-
 export default forwardRef<HTMLSelectElement, SelectProps>(
   (
     {

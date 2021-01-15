@@ -25,6 +25,7 @@ import Text from './components/Text';
 import TextArea from './components/TextArea';
 
 // TYPES
+export * from './types';
 
 // CSS
 import './overrides.css';
@@ -57,4 +58,4 @@ export {
   TextArea,
 };
 
-export * from './types';
+export * from './components/constants';

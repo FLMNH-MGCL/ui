@@ -1,27 +1,19 @@
-import clsx from "clsx";
-import React, { useEffect, useState } from "react";
-import DayPicker, { DateUtils, RangeModifier } from "react-day-picker";
-import "react-day-picker/lib/style.css";
-import Form from "./Form";
-import OutsideClickHandler from "react-outside-click-handler";
-import useKeyboard from "../utils/useKeyboard";
-import { AnimatePresence, motion } from "framer-motion";
-import { PropsOf } from "../types";
-import { isArray } from "lodash";
-import useToggle from "../utils/useToggle";
-
-type SinglePickerProps = {
-  label?: string;
-  name?: string;
-  futureOnly?: boolean;
-  pastOnly?: boolean;
-  ranged?: boolean;
-  fullWidth?: boolean;
-  initialDate?: string | Date;
-  placeholder?: string;
-} & PropsOf<typeof Form.Input>;
-
-// TODO: handle initial date for BOTH variants
+import clsx from 'clsx';
+import React, { useEffect, useState } from 'react';
+import DayPicker, { DateUtils, RangeModifier } from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
+import Form from './Form';
+import OutsideClickHandler from 'react-outside-click-handler';
+import useKeyboard from '../utils/useKeyboard';
+import { AnimatePresence, motion } from 'framer-motion';
+import { isArray } from 'lodash';
+import useToggle from '../utils/useToggle';
+import {
+  DateRange,
+  SinglePickerProps,
+  RangedPickerProps,
+  DatepickerProps,
+} from 'types';
 
 function SinglePicker({
   label,
@@ -38,7 +30,7 @@ function SinglePicker({
 
   function setInitialState() {
     if (initialDate) {
-      if (typeof initialDate === "object") {
+      if (typeof initialDate === 'object') {
         setValue(initialDate);
       } else {
         try {
@@ -59,9 +51,9 @@ function SinglePicker({
 
   function getDateString() {
     if (!value) {
-      return "";
+      return '';
     } else {
-      return value?.toISOString().split("T")[0];
+      return value?.toISOString().split('T')[0];
     }
   }
 
@@ -77,15 +69,15 @@ function SinglePicker({
     setDateString(getDateString());
   }, [value]);
 
-  useKeyboard("Escape", () => {
+  useKeyboard('Escape', () => {
     off();
   });
 
   return (
     <label
       className={clsx(
-        fullWidth && "flex-1",
-        "block text-sm font-medium leading-5 text-gray-700"
+        fullWidth && 'flex-1',
+        'block text-sm font-medium leading-5 text-gray-700'
       )}
     >
       {label}
@@ -98,7 +90,7 @@ function SinglePicker({
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.1, ease: "easeInOut" }}
+                transition={{ duration: 0.1, ease: 'easeInOut' }}
               >
                 <DayPicker
                   className="absolute bg-white mt-12 rounded-md shadow z-50"
@@ -112,7 +104,7 @@ function SinglePicker({
           {/* Doing this to access the string during onSubmit */}
           <Form.Input
             slim={props.slim}
-            placeholder={props.placeholder ?? "Select a Day"}
+            placeholder={props.placeholder ?? 'Select a Day'}
             name={props.name}
             value={dateString}
             onChange={() => dateString}
@@ -161,19 +153,13 @@ function SinglePicker({
   );
 }
 
-type Range = { from?: Date; to?: Date };
-
-type RangedPickerProps = Omit<SinglePickerProps, "initalDate"> & {
-  initialDate?: Range;
-};
-
 function RangedPicker({
   label,
   fullWidth,
   initialDate,
   ...props
 }: RangedPickerProps) {
-  const [range, setRange] = useState<Range>(getInitialState());
+  const [range, setRange] = useState<DateRange>(getInitialState());
   const [rangeString, setRangeString] = useState(getDateString());
 
   const [visible, { on, off }] = useToggle(false);
@@ -192,7 +178,7 @@ function RangedPicker({
     if (initialDate) {
       if (!isArray(initialDate)) {
         throw new Error(
-          "Invalid date passed into Datepicker (must be array with two Dates)"
+          'Invalid date passed into Datepicker (must be array with two Dates)'
         );
       } else {
         try {
@@ -212,12 +198,12 @@ function RangedPicker({
 
   function getDateString() {
     if (!to && !from) {
-      return "";
+      return '';
     } else {
       return clsx(
-        from?.toISOString().split("T")[0],
-        "to",
-        to?.toISOString().split("T")[0]
+        from?.toISOString().split('T')[0],
+        'to',
+        to?.toISOString().split('T')[0]
       );
     }
   }
@@ -239,15 +225,15 @@ function RangedPicker({
     setRangeString(getDateString());
   }, [range]);
 
-  useKeyboard("Escape", () => {
+  useKeyboard('Escape', () => {
     off();
   });
 
   return (
     <label
       className={clsx(
-        fullWidth && "flex-1",
-        "block text-sm font-medium leading-5 text-gray-700"
+        fullWidth && 'flex-1',
+        'block text-sm font-medium leading-5 text-gray-700'
       )}
     >
       {label}
@@ -259,7 +245,7 @@ function RangedPicker({
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.1, ease: "easeInOut" }}
+                transition={{ duration: 0.1, ease: 'easeInOut' }}
               >
                 {/* @ts-ignore: it works I promise */}
                 <DayPicker
@@ -323,9 +309,7 @@ function RangedPicker({
   );
 }
 
-type Props = SinglePickerProps | RangedPickerProps;
-
-export default function Datepicker({ ranged, ...props }: Props) {
+export default function Datepicker({ ranged, ...props }: DatepickerProps) {
   if (ranged) {
     // @ts-ignore: I know there are type issues with initial date
     return <RangedPicker {...props} />;
@@ -333,11 +317,3 @@ export default function Datepicker({ ranged, ...props }: Props) {
     return <SinglePicker {...props} />;
   }
 }
-
-// export function MonthPicker() {
-
-// }
-
-// export function DayPicker() {
-
-// }

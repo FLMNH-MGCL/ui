@@ -4,24 +4,7 @@ import {
   vscDarkPlus,
   vs,
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { MutuallyExclusive } from 'types';
-
-type ChildProps = {
-  children: React.ReactText;
-};
-
-type StringProps = {
-  codeString: string;
-};
-
-type Props = MutuallyExclusive<ChildProps, StringProps> & {
-  rounded?: boolean;
-  slim?: boolean;
-  // TODO: type me
-  language?: string;
-  theme?: 'light' | 'dark';
-  maxHeight?: string;
-};
+import { CodeProps } from 'types';
 
 export default function Code({
   codeString,
@@ -31,7 +14,7 @@ export default function Code({
   language = 'typescript',
   theme = localStorage.theme ?? 'dark',
   maxHeight,
-}: Props) {
+}: CodeProps) {
   const text = codeString ?? children;
   let styles: any =
     theme === 'light'

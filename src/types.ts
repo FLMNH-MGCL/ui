@@ -1,5 +1,12 @@
-import { BUTTONS, BUTTON_GAPS } from 'components/constants';
+import {
+  BUTTONS,
+  BUTTON_GAPS,
+  HEADINGS,
+  TEXT_SIZES,
+} from 'components/constants';
+import Form from 'components/Form';
 import { INPUT_ICONS } from 'components/Input';
+import { DeepPartial, SubmitHandler, UnpackNestedValue } from 'react-hook-form';
 import { TableProps as VTableProps } from 'react-virtualized';
 
 export type PropsOf<TTag = any> = TTag extends React.ElementType
@@ -93,3 +100,86 @@ export type TextAreaProps = {
   label?: string;
   fullWidth?: boolean;
 } & React.ComponentProps<'textarea'>;
+
+type ChildProps = {
+  children: React.ReactText;
+};
+
+type StringProps = {
+  codeString: string;
+};
+
+export type CodeProps = MutuallyExclusive<ChildProps, StringProps> & {
+  rounded?: boolean;
+  slim?: boolean;
+  language?: string;
+  theme?: 'light' | 'dark';
+  maxHeight?: string;
+};
+
+export type DateRange = { from?: Date; to?: Date };
+
+export type RangedPickerProps = Omit<SinglePickerProps, 'initalDate'> & {
+  initialDate?: DateRange;
+};
+
+export type SinglePickerProps = {
+  label?: string;
+  name?: string;
+  futureOnly?: boolean;
+  pastOnly?: boolean;
+  ranged?: boolean;
+  fullWidth?: boolean;
+  initialDate?: string | Date;
+  placeholder?: string;
+} & PropsOf<typeof Form.Input>;
+
+export type DatepickerProps = SinglePickerProps | RangedPickerProps;
+
+export type DividerProps = {
+  text?: string;
+};
+
+export type DropdownItemProps = {
+  text: string;
+  onClick?(): void;
+};
+
+export type DropdownSectionProps = { children: React.ReactNode };
+
+export type DropdownHeaderProps = {
+  text: string;
+};
+
+export type DropdownProps = {
+  open?: boolean;
+  label?: string;
+  origin?: 'left' | 'right';
+  labelIconPosition?: 'left' | 'right';
+  rounded?: boolean;
+  labelIcon?: React.ReactNode;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+};
+
+export type FormGroupProps = {
+  children: React.ReactNode;
+  flex?: boolean;
+  hidden?: boolean;
+};
+
+export type FormProps<T> = {
+  onSubmit: SubmitHandler<T>;
+  children: React.ReactNode;
+  disabled?: boolean;
+  defaultValues?: UnpackNestedValue<DeepPartial<T>>;
+  mode?: 'onChange' | 'onBlur' | 'onSubmit' | 'onTouched' | 'all';
+} & Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'>;
+
+export type HeadingProps = {
+  tag?: keyof typeof HEADINGS;
+  size?: keyof typeof TEXT_SIZES;
+  className?: string;
+  centered?: boolean;
+  children: React.ReactNode;
+};

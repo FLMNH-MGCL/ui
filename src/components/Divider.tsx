@@ -1,10 +1,7 @@
 import React from 'react';
+import { DividerProps } from 'types';
 
-type Props = {
-  text?: string;
-};
-
-export default function Divider({ text }: Props) {
+export default function Divider({ text }: DividerProps) {
   return (
     <div className="relative">
       <div className="absolute inset-0 flex items-center">
