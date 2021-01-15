@@ -1,16 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import { forwardRef } from 'react';
+import { InputProps } from 'types';
 
-export type Props = {
-  label?: string;
-  fullWidth?: boolean;
-  slim?: boolean;
-  icon?: keyof typeof INPUT_ICONS;
-  iconClick?(): void;
-} & React.ComponentProps<'input'>;
-
-export default forwardRef<HTMLInputElement, Props>(
+export default forwardRef<HTMLInputElement, InputProps>(
   ({ label, className, fullWidth, slim, iconClick, ...props }, ref) => {
     // @ts-ignore: this will work I promise
     const errors = props.errors && props.name && props.errors[props.name];

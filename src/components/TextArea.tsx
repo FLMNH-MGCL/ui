@@ -1,13 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import { forwardRef } from 'react';
+import { TextAreaProps } from 'types';
 
-export type Props = {
-  label?: string;
-  fullWidth?: boolean;
-} & React.ComponentProps<'textarea'>;
-
-export default forwardRef<HTMLTextAreaElement, Props>(
+export default forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ label, className, fullWidth, ...props }, ref) => {
     // @ts-ignore: this will work I promise
     const errors = props.errors && props.name && props.errors[props.name];

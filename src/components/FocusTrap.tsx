@@ -1,4 +1,5 @@
 import React, { useRef, useCallback, useEffect } from 'react';
+import { FocusTrapProps } from 'types';
 
 const focusableSelector = `
 a[href]:not([tabindex="-1"]),
@@ -13,13 +14,6 @@ embed:not([tabindex="-1"]),
 [tabindex]:not([tabindex="-1"]),
 [contenteditable]:not([tabindex="-1"])
 `;
-
-export type FocusTrapProps = {
-  /** Content to wrap. */
-  children: NonNullable<React.ReactNode>;
-  /** Disable automatic focusing. */
-  disabled?: boolean;
-};
 
 function getFocusableElements(element?: Element | null): Element[] {
   if (!element) {

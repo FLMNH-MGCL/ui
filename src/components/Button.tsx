@@ -2,14 +2,9 @@ import React from 'react';
 import clsx from 'clsx';
 import { BUTTONS, BUTTON_GAPS } from './constants';
 import Spinner from './Spinner';
+import { ButtonGroupProps, ButtonProps } from 'types';
 
-type GroupProps = {
-  children: React.ReactNode;
-  className?: string;
-  gap?: keyof typeof BUTTON_GAPS;
-};
-
-function ButtonGroup({ children, className, gap = 'md' }: GroupProps) {
+function ButtonGroup({ children, className, gap = 'md' }: ButtonGroupProps) {
   const groupStyles = BUTTON_GAPS[gap] ?? BUTTON_GAPS.md;
   return (
     <div
@@ -24,14 +19,6 @@ function ButtonGroup({ children, className, gap = 'md' }: GroupProps) {
   );
 }
 
-export type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: keyof typeof BUTTONS;
-  fullWidth?: boolean;
-  rounded?: boolean;
-  loading?: boolean;
-  tiny?: boolean;
-};
-
 // TODO: implement the loading distinction in this button element
 export default function Button({
   className,
@@ -40,7 +27,7 @@ export default function Button({
   rounded,
   loading,
   ...props
-}: Props) {
+}: ButtonProps) {
   const buttonStyle = BUTTONS[variant] || BUTTONS.default;
 
   if (loading) {

@@ -1,31 +1,12 @@
-import clsx from "clsx";
-import React, { useState } from "react";
-import { SortableContainer } from "react-sortable-hoc";
-import {
-  AutoSizer,
-  Column,
-  Table as VTable,
-  TableProps as VTableProps,
-} from "react-virtualized";
-import useWindowDimensions from "../utils/useWindowDimensions";
-import Spinner from "./Spinner";
+import clsx from 'clsx';
+import React, { useState } from 'react';
+import { SortableContainer } from 'react-sortable-hoc';
+import { AutoSizer, Column, Table as VTable } from 'react-virtualized';
+import { SortingConfig, TableProps } from 'types';
+import useWindowDimensions from '../utils/useWindowDimensions';
+import Spinner from './Spinner';
 
 const SortableTable = SortableContainer(VTable);
-
-export type SortingConfig = {
-  direction: "asc" | "desc";
-  column: string;
-};
-
-type TableProps = Omit<VTableProps, "width" | "height"> & {
-  basic?: boolean;
-  data: Object[];
-  activeIndex?: number;
-  headers: string[];
-  loading?: boolean;
-  sortable?: boolean;
-  containerClassname?: string;
-};
 
 // TODO: finish me plz
 function VirtualTable({
@@ -48,25 +29,25 @@ function VirtualTable({
   function getRowStyle({ index }: { index: number }) {
     // -1 is the header row
     if (index === -1) {
-      return { backgroundColor: "#f7fafc" };
+      return { backgroundColor: '#f7fafc' };
     } else if (activeIndex === undefined) {
       return {
-        cursor: "pointer",
+        cursor: 'pointer',
       };
     }
 
     // styles for actively selected row
     else if (data[index] && index === activeIndex) {
       return {
-        backgroundColor: "#f7fafc",
-        boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-        cursor: "pointer",
+        backgroundColor: '#f7fafc',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        cursor: 'pointer',
       };
     }
 
     // default styles for all rows
     return {
-      cursor: "pointer",
+      cursor: 'pointer',
     };
   }
 
@@ -75,7 +56,7 @@ function VirtualTable({
       let icon = null;
 
       if (sortingDirection && sortingDirection.column === dataKey) {
-        if (sortingDirection.direction === "asc") {
+        if (sortingDirection.direction === 'asc') {
           icon = (
             <svg
               className="w-4 h-4"
@@ -146,7 +127,7 @@ function VirtualTable({
   return (
     <div
       className={clsx(
-        "min-h-16 bg-white rounded-md shadow-around-lg",
+        'min-h-16 bg-white rounded-md shadow-around-lg',
         containerClassname
       )}
     >
@@ -162,11 +143,11 @@ function VirtualTable({
             rowGetter={({ index }) => data[index]}
             headerClassName={
               headerClassName ??
-              "px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 tracking-wider cursor-pointer focus:outline-none"
+              'px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 tracking-wider cursor-pointer focus:outline-none'
             }
             gridClassName={
               gridClassName ??
-              "whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
+              'whitespace-no-wrap text-sm leading-5 font-medium text-gray-900'
             }
             rowStyle={props.rowStyle ?? getRowStyle}
             {...props}
@@ -194,7 +175,7 @@ function BasicTable({
           key={header}
           className={
             headerClassName ??
-            "px-6 py-3 bg-gray-50 dark:bg-dark-500 text-left text-xs leading-4 font-medium text-gray-600 dark:text-dark-200 tracking-wider focus:outline-none"
+            'px-6 py-3 bg-gray-50 dark:bg-dark-500 text-left text-xs leading-4 font-medium text-gray-600 dark:text-dark-200 tracking-wider focus:outline-none'
           }
         >
           {header}
@@ -205,7 +186,7 @@ function BasicTable({
   return (
     <div
       className={clsx(
-        "min-h-16 bg-white dark:bg-dark-600 rounded-md overflow-hidden shadow-around-lg",
+        'min-h-16 bg-white dark:bg-dark-600 rounded-md overflow-hidden shadow-around-lg',
         containerClassname
       )}
     >

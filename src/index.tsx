@@ -23,6 +23,10 @@ import Table from './components/Table';
 import Tabs from './components/Tabs';
 import Text from './components/Text';
 import TextArea from './components/TextArea';
+
+// TYPES
+
+// CSS
 import './overrides.css';
 
 export {
@@ -52,3 +56,5 @@ export {
   Text,
   TextArea,
 };
+
+export * from './types';

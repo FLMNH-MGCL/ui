@@ -115,7 +115,7 @@ In a future release I may consider packaging this up better so you do not need t
 
 ## Contributing
 
-Feel free to contribute and make this project better! There are definitely areas that can be improved overall, I feel!
+Feel free to contribute and make this project better! There are definitely areas that can be improved overall!
 
 If you want to contribute, try to tackle any **existing issues on GitHub first** before attempting any other contributions.
 
