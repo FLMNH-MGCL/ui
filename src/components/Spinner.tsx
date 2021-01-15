@@ -1,20 +1,14 @@
 import clsx from 'clsx';
 import React from 'react';
+import { SpinnerProps } from 'types';
 import { SPINNER_SIZES } from './constants';
-
-type Props = {
-  active?: boolean;
-  size?: keyof typeof SPINNER_SIZES;
-  inline?: boolean;
-  color?: 'gray' | 'white';
-};
 
 export default function Spinner({
   inline,
   active,
   size = 'md',
   color = 'gray',
-}: Props) {
+}: SpinnerProps) {
   const SIZE = SPINNER_SIZES[size] ?? SPINNER_SIZES.md;
 
   if (!active) return null;

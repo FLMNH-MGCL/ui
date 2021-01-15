@@ -3,6 +3,7 @@ import {
   BUTTON_GAPS,
   HEADINGS,
   MODAL_SIZES,
+  SPINNER_SIZES,
   TEXT_SIZES,
 } from 'components/constants';
 import Form from 'components/Form';
@@ -216,3 +217,10 @@ export type RadioProps = {
   label?: string;
   stacked?: boolean;
 } & React.ComponentProps<'input'>;
+
+export type SpinnerProps = {
+  active?: boolean;
+  size?: keyof typeof SPINNER_SIZES;
+  inline?: boolean;
+  color?: 'gray' | 'white';
+};

@@ -860,43 +860,84 @@ function MyComponent() {
 
 ### Select
 
-TODO: descr
+Select is a UI wrapper for a select html element. It is functional, however needs to be rewritten.
+
+More thorogh documentation will be written after this eventual rewrite.
 
 #### Available Props
 
 ```tsx
-
+export type SelectProps = {
+  slim?: boolean;
+  label?: string;
+  fullWidth?: boolean;
+  options: SelectOption[];
+  updateControlled?(newVal: any): void;
+} & React.ComponentProps<'select'>;
 ```
 
 #### Basic Example
 
 ```tsx
 import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import { Select, SelectOption } from '@flmnh-mgcl/ui';
+
+const options: SelectOption[] = [
+  { label: 'Option 1', value: 1 },
+  { label: 'Option 2', value: 2 },
+  { label: 'Option 3', value: 3 },
+];
 
 function MyComponent() {
-  return <></>;
+  const [selected, setSelected] = useState();
+
+  return (
+    <React.Fragment>
+      <Form.Select
+        name="select"
+        options={options}
+        value={selected}
+        label="Select an option"
+        updateControlled={(newVal: any) => {
+          setSelected(newVal);
+        }}
+      />
+    </React.Fragment>
+  );
 }
 ```
 
 ### Spinner
 
-TODO: descr
+Spinner is a loading component, and may be used inline or absolute.
 
 #### Available Props
 
 ```tsx
-
+export type SpinnerProps = {
+  active?: boolean;
+  size?: keyof typeof SPINNER_SIZES; // default: md
+  inline?: boolean;
+  color?: 'gray' | 'white'; // default: gray
+};
 ```
 
 #### Basic Example
 
 ```tsx
 import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import PageContainer from './components/PageContainer'
+import { Spinner } from '@flmnh-mgcl/ui';
 
-function MyComponent() {
-  return <></>;
+type Props = {...}
+
+function MyComponent({ children, loading }: Props) {
+  return (
+    <PageContainer>
+      <Spinner active={loading} size="lg" />
+      {children}
+    </PageContainer>
+  );
 }
 ```
 
