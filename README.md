@@ -221,7 +221,7 @@ _These variants are **very** subject to change_
 #### Basic Example
 
 ```tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
@@ -625,127 +625,236 @@ function MyComponent() {
 
 ### Input
 
-TODO: descr
+Input is a standard input with additional props.
 
 #### Available Props
 
 ```tsx
-
+export type InputProps = {
+  label?: string;
+  fullWidth?: boolean;
+  slim?: boolean;
+  icon?: keyof typeof INPUT_ICONS; // password, passwordVisible, user, atMention, search
+  iconClick?(): void;
+} & React.ComponentProps<'input'>;
 ```
 
 #### Basic Example
 
+I would normally use the Form variants for this example, but for demonstrative purposes I will not
+
 ```tsx
-import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import React, { useState } from 'react';
+import { Input } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [visible, setVisible] = useState(false);
+
+  function togglePasswordVisibility() {
+    if (visible) setVisible(false);
+    else setVisible(true);
+  }
+
+  return (
+    <div className="flex flex-col space-y-3">
+      <Input
+        label="Username"
+        icon="user"
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        fullWidth
+      />
+      <Input
+        label="Password"
+        icon={visible ? 'passwordVisible' : 'password'}
+        iconClick={togglePasswordVisibility}
+        value={password}
+        type={visible ? 'text' : 'password'}
+        onChange={(e) => setPassword(e.target.value)}
+        fullWidth
+      />
+    </div>
+  );
 }
 ```
 
 ### Label
 
-TODO: descr
+Label is the same label used in the other UI components that have one internally (Select, Input, etc).
 
 #### Available Props
 
 ```tsx
-
+export type LabelProps = {
+  fullWidth?: boolean;
+} & React.ComponentProps<'label'>;
 ```
 
 #### Basic Example
 
 ```tsx
 import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import { Label } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  return (
+    <div>
+      <Label className="py-2">My Label</Label>
+      <p>....</p>
+    </div>
+  );
 }
 ```
 
 ### Modal
 
-TODO: descr
+Modal is a pop-up modal, utilizing a Portal and Focus Trap internally. It is animated using `framer-motion`.
+
+You will need to use all exported members to get the styling of the modal correct: `Modal.Footer` and `Modal.Content`
 
 #### Available Props
 
 ```tsx
+export type ModalContentProps = {
+  title: string | React.ReactNode;
+  children: React.ReactNode;
+};
 
+export type ModalFooterProps = { children: React.ReactNode };
+
+export type ModalProps = {
+  open: boolean;
+  size?: keyof typeof MODAL_SIZES;
+  onClose(): void;
+  children: React.ReactNode;
+};
 ```
 
 #### Basic Example
 
 ```tsx
-import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import React, { useState } from 'react';
+import { Button, Modal } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  const [visible, setVisible] = useState(false);
+
+  function on() {
+    setVisible(true);
+  }
+
+  function off() {
+    setVisible(false);
+  }
+
+  return (
+    <React.Fragment>
+      <Modal open={visible} onClose={off}>
+        <Modal.Content title="My Modal">This is my basic modal</Modal.Content>
+        <Modal.Footer>
+          <Button onClick={off}>Okay!</Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Button onClick={on}>Toggle Modal</Button>
+    </React.Fragment>
+  );
 }
 ```
 
 ### Notification
 
-TODO: descr
+Notification is a component designed to work with `react-notification-system`, however it is generalized enough that I included it in the component library. In order to use it as intended, please review the documentation for [`react-notification-system`](https://github.com/igorprado/react-notification-system), however.
 
 #### Available Props
 
 ```tsx
-
+export type NotificationProps = {
+  title: string;
+  message: string;
+  level: 'error' | 'success' | 'warning' | 'info';
+};
 ```
 
 #### Basic Example
 
 ```tsx
 import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import { Notification } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  return (
+    <Notification
+      title="Error Occurred"
+      message="Please review the appropriate logs"
+      level="error"
+    />
+  );
 }
 ```
 
 ### Portal
 
-TODO: descr
+Portal is just a simple component to render a react-dom portal. You may use it as you would normally (see [this](https://reactjs.org/docs/portals.html) for information about portals).
 
 #### Available Props
 
 ```tsx
-
+export type PortalProps = { children: React.ReactNode };
 ```
 
 #### Basic Example
 
 ```tsx
 import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import { Portal } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  return (
+    <Portal>
+      <div>... content ...</div>
+    </Portal>
+  );
 }
 ```
 
 ### Radio
 
-TODO: descr
+Radio is a checkbox component. It may be controlled, or used with a Form via `Form.Radio`.
 
 #### Available Props
 
 ```tsx
-
+export type RadioProps = {
+  checked?: boolean;
+  label?: string;
+  stacked?: boolean; // flex-col
+} & React.ComponentProps<'input'>;
 ```
 
 #### Basic Example
 
 ```tsx
-import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import React, { useState } from 'react';
+import { Radio } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  const [checked, setChecked] = useState(false);
+
+  function toggle() {
+    if (checked) setChecked(false);
+    else setChecked(true);
+  }
+  return (
+    <div className="flex flex-col space-y-4">
+      <Radio label="Radio 1" />
+      <Radio label="Radio 2" stacked />
+      <Radio label="Radio 2" checked={checked} onChange={toggle} />
+    </div>
+  );
 }
 ```
 

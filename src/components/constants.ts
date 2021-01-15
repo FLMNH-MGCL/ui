@@ -145,3 +145,12 @@ export const TABLE_CLASSES = {
   footerFixed:
     'h-16 bg-gray-50 dark:bg-dark-600 flex items-center justify-between px-4',
 };
+
+export const MODAL_SIZES = {
+  tiny: 'max-w-lg',
+  small: 'max-w-xl',
+  medium: 'max-w-2xl',
+  large: 'max-w-3xl',
+  almostMassive: 'max-w-4xl',
+  massive: '',
+};

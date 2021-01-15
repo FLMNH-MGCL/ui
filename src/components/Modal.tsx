@@ -3,13 +3,10 @@ import FocusTrap from './FocusTrap';
 import Portal from './Portal';
 import { AnimatePresence, motion } from 'framer-motion';
 import clsx from 'clsx';
+import { ModalContentProps, ModalFooterProps, ModalProps } from 'types';
+import { MODAL_SIZES } from './constants';
 
-type ContentProps = {
-  title: string | React.ReactNode;
-  children: React.ReactNode;
-};
-
-function ModalContent({ title, children }: ContentProps) {
+function ModalContent({ title, children }: ModalContentProps) {
   return (
     <div className="bg-white  dark:bg-dark-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-t-md">
       <div className="mt-3 sm:mt-0">
@@ -27,29 +24,13 @@ function ModalContent({ title, children }: ContentProps) {
   );
 }
 
-function ModalFooter({ children }: { children: React.ReactNode }) {
+function ModalFooter({ children }: ModalFooterProps) {
   return (
     <div className="bg-gray-50 dark:bg-dark-600 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse sticky rounded-b-md">
       {children}
     </div>
   );
 }
-
-const SIZES = {
-  tiny: 'max-w-lg',
-  small: 'max-w-xl',
-  medium: 'max-w-2xl',
-  large: 'max-w-3xl',
-  almostMassive: 'max-w-4xl',
-  massive: '',
-};
-
-type ModalProps = {
-  open: boolean;
-  size?: keyof typeof SIZES;
-  onClose(): void;
-  children: React.ReactNode;
-};
 
 // TODO: use media queries
 export default function Modal({
@@ -58,7 +39,7 @@ export default function Modal({
   onClose,
   children,
 }: ModalProps) {
-  const modalSize = SIZES[size];
+  const modalSize = MODAL_SIZES[size];
 
   const modalInitial = {
     opacity: 0,

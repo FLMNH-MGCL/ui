@@ -1,7 +1,8 @@
 import { useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { PortalProps } from 'types';
 
-export default function Portal({ children }: { children: React.ReactNode }) {
+export default function Portal({ children }: PortalProps) {
   const portalRef = useRef<HTMLDivElement | null>(null);
 
   if (!portalRef.current) {

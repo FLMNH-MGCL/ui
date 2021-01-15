@@ -1,9 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-
-type LabelProps = {
-  fullWidth?: boolean;
-} & React.ComponentProps<'label'>;
+import { LabelProps } from 'types';
 
 export default function Label({ className, fullWidth, ...props }: LabelProps) {
   return (

@@ -1,13 +1,8 @@
 import clsx from 'clsx';
 import React, { forwardRef } from 'react';
+import { RadioProps } from 'types';
 
-type Props = {
-  checked?: boolean;
-  label?: string;
-  stacked?: boolean;
-} & React.ComponentProps<'input'>;
-
-export default forwardRef<HTMLInputElement, Props>(
+export default forwardRef<HTMLInputElement, RadioProps>(
   ({ label, checked, stacked, className, ...props }, ref) => {
     return (
       <div

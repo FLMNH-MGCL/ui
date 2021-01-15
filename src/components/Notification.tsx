@@ -1,14 +1,13 @@
 import clsx from 'clsx';
 import React from 'react';
+import { NotificationProps } from 'types';
 import { NOTIFICATION_COLORS } from './constants';
 
-type Props = {
-  title: string;
-  message: string;
-  level: 'error' | 'success' | 'warning' | 'info';
-};
-
-export default function Notification({ title, message, level }: Props) {
+export default function Notification({
+  title,
+  message,
+  level,
+}: NotificationProps) {
   const icon = NOTIFICATION_ICONS[level] ?? NOTIFICATION_ICONS.info;
   const colors = NOTIFICATION_COLORS[level] ?? NOTIFICATION_COLORS.info;
 

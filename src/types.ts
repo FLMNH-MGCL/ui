@@ -2,6 +2,7 @@ import {
   BUTTONS,
   BUTTON_GAPS,
   HEADINGS,
+  MODAL_SIZES,
   TEXT_SIZES,
 } from 'components/constants';
 import Form from 'components/Form';
@@ -183,3 +184,35 @@ export type HeadingProps = {
   centered?: boolean;
   children: React.ReactNode;
 };
+
+export type LabelProps = {
+  fullWidth?: boolean;
+} & React.ComponentProps<'label'>;
+
+export type ModalContentProps = {
+  title: string | React.ReactNode;
+  children: React.ReactNode;
+};
+
+export type ModalFooterProps = { children: React.ReactNode };
+
+export type ModalProps = {
+  open: boolean;
+  size?: keyof typeof MODAL_SIZES;
+  onClose(): void;
+  children: React.ReactNode;
+};
+
+export type NotificationProps = {
+  title: string;
+  message: string;
+  level: 'error' | 'success' | 'warning' | 'info';
+};
+
+export type PortalProps = { children: React.ReactNode };
+
+export type RadioProps = {
+  checked?: boolean;
+  label?: string;
+  stacked?: boolean;
+} & React.ComponentProps<'input'>;
