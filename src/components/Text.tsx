@@ -1,14 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
-import { PropsOf } from 'types';
+import { TextProps } from 'types';
 import { TEXT } from './constants';
-
-type Props = {
-  variant?: keyof typeof TEXT;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  centered?: boolean;
-  onClick?(): void;
-} & PropsOf<'p'>;
 
 export default function Text({
   centered,
@@ -17,7 +10,7 @@ export default function Text({
   className,
   onClick,
   ...props
-}: Props) {
+}: TextProps) {
   const textStyle = TEXT[variant] || TEXT.subtext;
 
   return (

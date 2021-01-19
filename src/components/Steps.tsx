@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { ProgressBar, Step } from "react-step-progress-bar";
-import "react-step-progress-bar/styles.css";
+import React, { useEffect, useState } from 'react';
+import { ProgressBar, Step } from 'react-step-progress-bar';
+import 'react-step-progress-bar/styles.css';
+import { StepsProps } from 'types';
 
-type Props = {
-  steps: number;
-  current: number;
-};
-
-export default function Steps({ steps, current }: Props) {
+export default function Steps({ steps, current }: StepsProps) {
   const [percent, setPercent] = useState(calculatePercent());
 
   function calculatePercent() {
     if (steps === 0) {
-      throw new Error("Divide by Zero error in Steps Component!");
+      throw new Error('Divide by Zero error in Steps Component!');
     } else {
       return Math.ceil((current / steps) * 100);
     }
@@ -28,7 +24,7 @@ export default function Steps({ steps, current }: Props) {
         <Step key={key}>
           {({ accomplished, index }) => (
             <div
-              className={`indexedStep ${accomplished ? "accomplished" : null}`}
+              className={`indexedStep ${accomplished ? 'accomplished' : null}`}
             >
               {index + 1}
             </div>

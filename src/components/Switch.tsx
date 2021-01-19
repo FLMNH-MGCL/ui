@@ -1,12 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
+import { SwitchProps } from 'types';
 
-type Props = {
-  enabled: boolean;
-  onToggle(): void;
-};
-
-export default function Switch({ enabled, onToggle }: Props) {
+export default function Switch({ enabled, onToggle }: SwitchProps) {
   return (
     <span
       role="checkbox"

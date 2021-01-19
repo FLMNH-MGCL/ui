@@ -943,147 +943,271 @@ function MyComponent({ children, loading }: Props) {
 
 ### Statistic
 
-TODO: descr
+Statistic is a basic component for rendering number / string pairs. For now, it only supports one configuration: numerical statistic value on top, statistic label underneath.
 
 #### Available Props
 
 ```tsx
-
+export type StatisticProps = {
+  value?: number;
+  percent?: boolean;
+  unit: string;
+};
 ```
 
 #### Basic Example
 
 ```tsx
 import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import { Statistic } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  return <Statistic value={102} unit="people" />;
 }
 ```
 
 ### Steps
 
-TODO: descr
+Steps utilizes a typed wrapper for `react-step-progress-bar`, however it is used internally in the Steps component and therefore has separate props. I use it for multi-step forms mostly, however it may be used for other purposes.
 
 #### Available Props
 
 ```tsx
-
+export type StepsProps = {
+  steps: number;
+  current: number;
+};
 ```
 
 #### Basic Example
 
 ```tsx
-import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import React, { useState } from 'react';
+import { Steps, Button } from '@flmnh-mgcl/ui';
 
-function MyComponent() {
-  return <></>;
+function MyComponent({ pages }: Props) {
+  const [page, setPage] = useState(0);
+
+  function paginateForward() {
+    // ....
+  }
+
+  function paginateBackward() {
+    // ....
+  }
+
+  function renderPage() {
+    // ...
+  }
+
+  return (
+    <div>
+      <Steps steps={pages.length} current={page} />
+
+      {renderPage()}
+
+      <div>
+        <Button.Group>
+          <Button onClick={paginateBackward}>Back</Button>
+          <Button onClick={paginateForward}>Continue</Button>
+        </Button.Group>
+      </div>
+    </div>
+  );
 }
 ```
 
 ### Switch
 
-TODO: descr
+Switch component is a toggle slider, it is styled after TailwindUI.
 
 #### Available Props
 
 ```tsx
-
+export type SwitchProps = {
+  enabled: boolean;
+  onToggle(): void;
+};
 ```
 
 #### Basic Example
 
 ```tsx
-import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import React, { useState } from 'react';
+import { Switch, Label } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  const [theme, setTheme] = useState(localStorage.theme ?? 'dark');
+
+  function toggle() {
+    // ...
+  }
+
+  return (
+    <div className="flex space-x-2 items-center">
+      <Label>Light Theme</Label>
+      <Switch enabled={theme === 'dark'} onToggle={toggle} />
+      <Label>Dark Theme</Label>
+    </div>
+  );
 }
 ```
 
 ### Table
 
-TODO: descr
+Table is still currently incomplete. As of now, it can render a simple, non-virtualized table with static headers. It will support more dynamic tables and table features in the future.
 
 #### Available Props
 
-```tsx
+the type of TableProps is the union of TableProps from `react-virtualized`, with `height` and `width` omitted, and the following definition following the '&':
 
+```tsx
+export type TableProps = Omit<VTableProps, 'width' | 'height'> & {
+  basic?: boolean;
+  data: Object[];
+  activeIndex?: number;
+  headers: string[];
+  loading?: boolean;
+  sortable?: boolean;
+  containerClassname?: string;
+};
 ```
+
+`width` and `height` are omitted because Table uses an autosizer internally for the virtualized variant.
 
 #### Basic Example
 
+As the virtualized table is not quite ready, only the basic table will be used in the example below.
+
 ```tsx
 import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import { Table } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  // BASIC TABLE
+  return (
+    <Table
+      basic
+      data={[
+        {
+          1: 'value',
+          2: 'value',
+        },
+        {
+          1: 'value2',
+          2: 'value2',
+        },
+        {
+          1: 'value3',
+          2: 'value3',
+        },
+      ]}
+      headers={['1', '2']}
+    />
+  );
 }
 ```
 
 ### Tabs
 
-TODO: descr
+Tabs is a tab menu component. Currently, it does not support linked tabs (i.e. router basic tab menu), however this is something that is planned.
 
 #### Available Props
 
 ```tsx
-
+export type TabProps = {
+  text: string;
+  onClick(): void;
+  fullWidth?: boolean;
+  active?: boolean;
+};
 ```
 
 #### Basic Example
 
-```tsx
-import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+Setting the tab on change is handled internally, all it needs is the state dispatch function:
 
-function MyComponent() {
-  return <></>;
+```tsx
+import React, { useState } from 'react';
+import { Tabs } from '@flmnh-mgcl/ui';
+
+function SettingsPage() {
+  const [tab, setTab] = useState(0);
+
+  function renderTab() {
+    // ...
+  }
+
+  return (
+    <div>
+      <Tabs
+        fullWidth
+        tabs={['General', 'Profile']}
+        selectedIndex={tab}
+        onChange={setTab}
+      />
+
+      <div>{renderTab()}</div>
+    </div>
+  );
 }
 ```
 
 ### Text
 
-TODO: descr
+Text is a pre-styled p-tag component. It does support onClick events, and has the following additional props:
 
 #### Available Props
 
 ```tsx
-
+export type TextProps = {
+  variant?: keyof typeof TEXT;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  centered?: boolean;
+  onClick?(): void;
+} & PropsOf<'p'>;
 ```
 
 #### Basic Example
 
 ```tsx
 import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import { Text } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  return <Text size="sm">This is my paragraph</Text>;
 }
 ```
 
 ### TextArea
 
-TODO: descr
+TextArea is a standard textarea with additional props.
 
 #### Available Props
 
 ```tsx
-
+export type TextAreaProps = {
+  label?: string;
+  fullWidth?: boolean;
+} & React.ComponentProps<'textarea'>;
 ```
 
 #### Basic Example
 
 ```tsx
-import React from 'react';
-import {} from '@flmnh-mgcl/ui';
+import React, { useState } from 'react';
+import { TextArea } from '@flmnh-mgcl/ui';
 
 function MyComponent() {
-  return <></>;
+  const [value, setValue] = useState('');
+
+  return (
+    <TextArea
+      name="myValue"
+      label="Value"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
 }
 ```

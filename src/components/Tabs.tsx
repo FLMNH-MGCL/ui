@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
+import { TabProps } from 'types';
 
 type ActiveIndicatorProps = {
   className?: string;
@@ -14,13 +15,6 @@ function ActiveIndicator({ className, styles }: ActiveIndicatorProps) {
     />
   );
 }
-
-type TabProps = {
-  text: string;
-  onClick(): void;
-  fullWidth?: boolean;
-  active?: boolean;
-};
 
 function Tab({ text, fullWidth, onClick, active }: TabProps) {
   return (

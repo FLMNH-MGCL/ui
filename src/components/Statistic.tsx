@@ -1,12 +1,11 @@
 import React from 'react';
+import { StatisticProps } from 'types';
 
-type Props = {
-  value?: number;
-  percent?: boolean;
-  unit: string;
-};
-
-export default function Statistic({ value, percent = false, unit }: Props) {
+export default function Statistic({
+  value,
+  percent = false,
+  unit,
+}: StatisticProps) {
   return (
     <div className="flex flex-col  p-6 text-center">
       <p

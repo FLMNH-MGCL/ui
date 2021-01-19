@@ -4,6 +4,7 @@ import {
   HEADINGS,
   MODAL_SIZES,
   SPINNER_SIZES,
+  TEXT,
   TEXT_SIZES,
 } from 'components/constants';
 import Form from 'components/Form';
@@ -224,3 +225,33 @@ export type SpinnerProps = {
   inline?: boolean;
   color?: 'gray' | 'white';
 };
+
+export type StatisticProps = {
+  value?: number;
+  percent?: boolean;
+  unit: string;
+};
+
+export type StepsProps = {
+  steps: number;
+  current: number;
+};
+
+export type SwitchProps = {
+  enabled: boolean;
+  onToggle(): void;
+};
+
+export type TabProps = {
+  text: string;
+  onClick(): void;
+  fullWidth?: boolean;
+  active?: boolean;
+};
+
+export type TextProps = {
+  variant?: keyof typeof TEXT;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  centered?: boolean;
+  onClick?(): void;
+} & PropsOf<'p'>;
