@@ -17,7 +17,7 @@
     "paths": {
       "*": ["src/*", "node_modules/*"]
     },
-    "jsx": "react",
+    "jsx": "preserve",
     "esModuleInterop": true,
     "target": "es5",
     "allowJs": true,

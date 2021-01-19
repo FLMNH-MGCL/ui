@@ -38,13 +38,13 @@ export type ButtonGroupProps = {
   gap?: keyof typeof BUTTON_GAPS;
 };
 
-export type InputProps = {
+export type InputProps = React.ComponentPropsWithoutRef<'input'> & {
   label?: string;
   fullWidth?: boolean;
   slim?: boolean;
   icon?: keyof typeof INPUT_ICONS;
   iconClick?(): void;
-} & React.ComponentProps<'input'>;
+};
 
 export type FocusTrapProps = {
   /** Content to wrap. */
@@ -82,7 +82,7 @@ export type SelectProps = {
   fullWidth?: boolean;
   options: SelectOption[];
   updateControlled?(newVal: any): void;
-} & React.ComponentProps<'select'>;
+} & React.ComponentPropsWithoutRef<'select'>;
 
 export type SortingConfig = {
   direction: 'asc' | 'desc';
@@ -102,7 +102,7 @@ export type TableProps = Omit<VTableProps, 'width' | 'height'> & {
 export type TextAreaProps = {
   label?: string;
   fullWidth?: boolean;
-} & React.ComponentProps<'textarea'>;
+} & React.ComponentPropsWithoutRef<'textarea'>;
 
 type ChildProps = {
   children: React.ReactText;
@@ -217,7 +217,7 @@ export type RadioProps = {
   checked?: boolean;
   label?: string;
   stacked?: boolean;
-} & React.ComponentProps<'input'>;
+} & React.ComponentPropsWithoutRef<'input'>;
 
 export type SpinnerProps = {
   active?: boolean;
