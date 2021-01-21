@@ -14,16 +14,19 @@ export default function Code({
   language = 'typescript',
   theme = localStorage.theme ?? 'dark',
   maxHeight,
+  style = {},
 }: CodeProps) {
   const text = codeString ?? children;
   let styles: any =
     theme === 'light'
       ? {
+          ...style,
           borderRadius: rounded ? '.375rem' : 0,
           backgroundColor: '#F9FAFB',
           padding: slim ? '.25rem' : '1em',
         }
       : {
+          ...style,
           borderRadius: rounded ? '.375rem' : 0,
           padding: slim ? '.25rem' : '1em',
         };

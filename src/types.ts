@@ -118,6 +118,7 @@ export type CodeProps = MutuallyExclusive<ChildProps, StringProps> & {
   language?: string;
   theme?: 'light' | 'dark';
   maxHeight?: string;
+  style?: React.CSSProperties;
 };
 
 export type DateRange = { from?: Date; to?: Date };
