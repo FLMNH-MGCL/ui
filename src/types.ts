@@ -79,6 +79,7 @@ export type UISelectProps = {
 export type SelectProps = {
   slim?: boolean;
   label?: string;
+  searchable?: boolean;
   fullWidth?: boolean;
   options: SelectOption[];
   updateControlled?(newVal: any): void;

@@ -862,13 +862,14 @@ function MyComponent() {
 
 Select is a UI wrapper for a select html element. It is functional, however needs to be rewritten.
 
-More thorogh documentation will be written after this eventual rewrite.
+More thorough documentation will be written after this eventual rewrite.
 
 #### Available Props
 
 ```tsx
 export type SelectProps = {
   slim?: boolean;
+  searchable?: boolean;
   label?: string;
   fullWidth?: boolean;
   options: SelectOption[];
