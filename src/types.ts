@@ -24,6 +24,17 @@ export type MutuallyExclusive<T, U> = T | U extends object
 
 export type FormSubmitValues = Record<string, any>;
 
+export type AccordionItemProps = {
+  open: boolean;
+  title: string;
+  content: string | string[] | React.ReactChild;
+  onClick(): void;
+};
+
+export type AccordionProps = {
+  items: Omit<AccordionItemProps, 'open' | 'onClick'>[];
+};
+
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: keyof typeof BUTTONS;
   fullWidth?: boolean;

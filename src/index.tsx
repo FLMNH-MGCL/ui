@@ -1,3 +1,4 @@
+import Accordion from './components/Accordion';
 import Badge from './components/Badge';
 import Button from './components/Button';
 import Checkmark from './components/Checkmark';
@@ -31,6 +32,7 @@ export * from './types';
 import './overrides.css';
 
 export {
+  Accordion,
   Badge,
   Button,
   Checkmark,
