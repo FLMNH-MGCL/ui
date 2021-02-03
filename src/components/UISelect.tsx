@@ -132,7 +132,7 @@ export function UISelect({
         <span className="inline-block w-full rounded-md shadow-sm">
           <button
             type="button"
-            onClick={toggle}
+            onClick={disabled ? undefined : toggle}
             className={clsx(
               slim ? 'py-1' : 'py-2',
               errors &&
