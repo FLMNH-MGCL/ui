@@ -55,8 +55,10 @@ function AccordionItem({ open, title, content, onClick }: AccordionItemProps) {
           >
             {Array.isArray(content) ? (
               content.map((text, i) => <Text key={i}>{text}</Text>)
-            ) : (
+            ) : typeof content === 'string' ? (
               <Text>{content}</Text>
+            ) : (
+              content
             )}
           </motion.div>
         )}
