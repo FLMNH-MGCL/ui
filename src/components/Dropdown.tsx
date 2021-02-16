@@ -54,6 +54,7 @@ export default function Dropdown({
   labelIconPosition = 'left',
   icon,
   children,
+  disabled,
 }: DropdownProps) {
   const [visible, { toggle, off }] = useToggle(open);
 
@@ -71,7 +72,7 @@ export default function Dropdown({
           <span className="rounded-md shadow-sm">
             {rounded ? (
               <CircleButton
-                onClick={toggle}
+                onClick={disabled ? undefined : toggle}
                 icon={
                   icon ?? (
                     <svg
@@ -91,7 +92,13 @@ export default function Dropdown({
               />
             ) : (
               <button
-                className="rounded-md px-4 py-2 inline-flex justify-center items-center w-full border border-gray-300 dark:border-dark-600 bg-white dark:bg-dark-400 dark:shadow-lg text-sm leading-5 font-medium text-gray-700 dark:text-dark-200 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
+                className={clsx(
+                  disabled
+                    ? 'bg-gray-100 dark:bg-dark-600 dark:text-dark-300 dark:border-dark-700'
+                    : 'bg-white dark:bg-dark-400 text-gray-700 dark:text-dark-200 hover:text-gray-500 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800',
+                  'border-gray-300 dark:border-dark-600 rounded-md px-4 py-2 inline-flex justify-center items-center w-full border dark:shadow-lg text-sm leading-5 font-medium focus:outline-none focus:border-blue-300 transition ease-in-out duration-150'
+                )}
+                disabled
                 onClick={toggle}
               >
                 {labelIconPosition === 'left' && labelIcon && labelIcon}

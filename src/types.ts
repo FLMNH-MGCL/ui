@@ -176,6 +176,7 @@ export type DropdownProps = {
   labelIcon?: React.ReactNode;
   icon?: React.ReactNode;
   children: React.ReactNode;
+  disabled?: boolean;
 };
 
 export type FormGroupProps = {
