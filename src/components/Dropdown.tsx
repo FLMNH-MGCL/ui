@@ -98,7 +98,7 @@ export default function Dropdown({
                     : 'bg-white dark:bg-dark-400 text-gray-700 dark:text-dark-200 hover:text-gray-500 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800',
                   'border-gray-300 dark:border-dark-600 rounded-md px-4 py-2 inline-flex justify-center items-center w-full border dark:shadow-lg text-sm leading-5 font-medium focus:outline-none focus:border-blue-300 transition ease-in-out duration-150'
                 )}
-                disabled
+                disabled={disabled}
                 onClick={toggle}
               >
                 {labelIconPosition === 'left' && labelIcon && labelIcon}
