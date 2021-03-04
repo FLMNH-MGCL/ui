@@ -18,100 +18,26 @@ npm install @flmnh-mgcl/ui
 
 ## Tailwind Config
 
-I have not included any of the Tailwind configuration in this library, as such in order to use it you must ensure your project is properly configured separately. Here is the config I use in my projects that allow the components render properly:
+There is now an installable [plugin](https://www.npmjs.com/package/@flmnh-mgcl/ui-tailwind-config) available. To use the classes defined for the corresponding UI, install the plugin and add it to your own `tailwind.config.js` file as you would any other plugin.
 
-```js
-const defaultTheme = require('tailwindcss/defaultTheme');
-const uicolors = require('@tailwindcss/ui/colors');
-
-module.exports = {
-  darkMode: 'class',
-  variants: {
-    extend: {
-      margin: ['first'],
-      padding: ['first'],
-    },
-  },
-  theme: {
-    colors: {
-      ...uicolors,
-      dark: {
-        900: 'rgb(25,25,25)',
-        800: 'rgb(36,36,36)',
-        700: 'rgb(40,40,40)',
-        600: '#2D2D2D',
-        500: 'rgb(50,50,50)',
-        400: '#3d3d3d',
-        300: '#b2b2b2',
-        200: 'rgb(223,223,223)',
-        twilight: 'rgb(30, 30, 30)',
-        stacking: 'rgba(25,25,25,0.2)',
-      },
-    },
-    extend: {
-      fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
-      },
-      minHeight: {
-        0: 0,
-        1: '0.25rem',
-        2: '0.5rem',
-        3: '0.75rem',
-        4: '1rem',
-        5: '1.25rem',
-        6: '1.5rem',
-        8: '2rem',
-        10: '2.5rem',
-        12: '3rem',
-        16: '4rem',
-        20: '5rem',
-        24: '6rem',
-        32: '8rem',
-        40: '10rem',
-        48: '12rem',
-        56: '14rem',
-        64: '16rem',
-        68: '17rem',
-        72: '18rem',
-        76: '19rem',
-        80: '20rem',
-        84: '21rem',
-        88: '22rem',
-        92: '23rem',
-        '5/6': '83vh',
-      },
-      minWidth: {
-        0: 0,
-        1: '0.25rem',
-        2: '0.5rem',
-        3: '0.75rem',
-        4: '1rem',
-        5: '1.25rem',
-        6: '1.5rem',
-        8: '2rem',
-        10: '2.5rem',
-        12: '3rem',
-        16: '4rem',
-        20: '5rem',
-        24: '6rem',
-        32: '8rem',
-        40: '10rem',
-        48: '12rem',
-        56: '14rem',
-        64: '16rem',
-      },
-    },
-  },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
-  ],
-  purge: ['./src/**/*.{js,jsx,ts,tsx}'],
-};
+```bash
+yarn add @flmnh-mgcl/ui-tailwind-config
 ```
 
-In a future release I may consider packaging this up better so you do not need to account for this
+```js
+// -- tailwind.config.js --
+
+module.exports = {
+  theme: {
+    extend: {},
+  },
+  variants: {
+    extend: {},
+  },
+  // ADD PLUGIN HERE
+  plugins: [require('@flmnh-mgcl/ui-tailwind-config')],
+};
+```
 
 ## Contributing
 
@@ -123,6 +49,7 @@ If you want to contribute, try to tackle any **existing issues on GitHub first**
 
 _This project is still under active development, components will be added / altered throughout the duration of the project. These are the currently available components:_
 
+- [Accordion](#accordion)
 - [Badge](#badge)
 - [Button](#button)
 - [Button.Group](#buttongroup)
@@ -151,6 +78,61 @@ _This project is still under active development, components will be added / alte
 - [TextArea](#textarea)
 
 _Note: Most components are based off of their counterparts in the Tailwind UI components. While they do not use Tailwind UI components, the styling itself is largely inspired from here._
+
+### Accordion
+
+#### Available Props
+
+```tsx
+export type AccordionItemProps = {
+  open: boolean;
+  title: string;
+  content: string | string[] | React.ReactChild;
+  onClick(): void;
+};
+
+export type AccordionProps = {
+  items: Omit<AccordionItemProps, 'open' | 'onClick'>[];
+};
+```
+
+#### Basic Example
+
+```tsx
+import React from 'react';
+import { Accordion } from '@flmnh-mgcl/ui';
+
+const items = [
+  {
+    title: 'This is a React.ReactNode Accordion Item',
+    content: (
+      <div className="flex flex-col space-y-3">
+        <Text>This is an example of a React.ReactNode Accordion Item.</Text>
+
+        <Text>
+          I developed it to allow for strings / string arrays / React.ReactNodes
+          to allow for more customization, so that you can do more complex
+          Accordion Items if needed.
+        </Text>
+      </div>
+    ),
+  },
+  {
+    title: 'This one is just a basic string content',
+    content:
+      'It will be rendered as a single <Text> component with {content} as the child',
+  },
+  {
+    title: 'This one is just a string[] content',
+    content:
+      'It will be rendered as multiple <Text> components, one for each element in the content array, emulating paragraphs',
+  },
+];
+
+function MyComponent() {
+  return <Accordion items={items} />;
+}
+```
 
 ### Badge
 
