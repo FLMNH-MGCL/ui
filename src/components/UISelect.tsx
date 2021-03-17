@@ -2,33 +2,34 @@ import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { SelectBadgeProps, SelectOption } from 'types';
+import { SelectOption } from 'types';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
+import FocusTrap from './FocusTrap';
 
-function SelectedBadge({ label, onDelete }: SelectBadgeProps) {
-  return (
-    <span className="flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-gray-100 text-gray-800 hover:bg-gray-200 space-x-2 max-w-1/2 truncate">
-      <p>{label}</p>
+// function SelectedBadge({ label, onDelete }: SelectBadgeProps) {
+//   return (
+//     <span className="flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-gray-100 text-gray-800 hover:bg-gray-200 space-x-2 max-w-1/2 truncate">
+//       <p>{label}</p>
 
-      <svg
-        onClick={onDelete}
-        className="w-3 h-3 cursor-pointer"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M6 18L18 6M6 6l12 12"
-        ></path>
-      </svg>
-    </span>
-  );
-}
+//       <svg
+//         onClick={onDelete}
+//         className="w-3 h-3 cursor-pointer"
+//         fill="none"
+//         stroke="currentColor"
+//         viewBox="0 0 24 24"
+//         xmlns="http://www.w3.org/2000/svg"
+//       >
+//         <path
+//           strokeLinecap="round"
+//           strokeLinejoin="round"
+//           strokeWidth="2"
+//           d="M6 18L18 6M6 6l12 12"
+//         ></path>
+//       </svg>
+//     </span>
+//   );
+// }
 
 type SelectItemProps = {
   label: string;
@@ -126,6 +127,13 @@ export function UISelect({
     }
   }
 
+  function truncateDisplay() {
+    // @ts-ignore: I only call this function when display is an array
+    let ret = display?.map((item) => item.label).join(', ');
+
+    return ret.length > 25 ? ret.substring(0, 25) + '...' : ret;
+  }
+
   return (
     <OutsideClickHandler onOutsideClick={off}>
       <div className="relative">
@@ -148,17 +156,9 @@ export function UISelect({
             <div className="flex items-center space-x-3">
               {Array.isArray(display) ? (
                 display.length > 0 ? (
-                  <React.Fragment>
-                    {display.slice(0, 3).map((item: SelectOption) => {
-                      return (
-                        <SelectedBadge
-                          key={`badge-${item.value}`}
-                          onDelete={() => onSelect(item)}
-                          label={item.label}
-                        />
-                      );
-                    })}
-                  </React.Fragment>
+                  <p className="dark:text-dark-200 truncate">
+                    {truncateDisplay()}
+                  </p>
                 ) : (
                   <p className="text-gray-400 dark:text-dark-300">
                     {placeholder ?? 'Select'}
@@ -209,30 +209,32 @@ export function UISelect({
 
         <AnimatePresence>
           {visible && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.1, ease: 'easeInOut' }}
-              className="absolute mt-1 w-full rounded-md bg-white shadow-lg z-50"
-            >
-              <ul className="bg-white dark:bg-dark-400 max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5">
-                {searchable && (
-                  <li
-                    id="listbox-item-0"
-                    className="bg-white dark:bg-dark-500 text-gray-900 dark:text-dark-200 cursor-pointer select-none relative py-2  hover:bg-gray-50 dark:hover:bg-dark-700 border-b border-gray-100 dark:border-dark-400"
-                  >
-                    <input
-                      className="pl-3 bg-transparent w-full "
-                      value={filter}
-                      onChange={(e) => setFilter(e.currentTarget.value)}
-                      placeholder="Filter Options"
-                    />
-                  </li>
-                )}
-                {renderOptions()}
-              </ul>
-            </motion.div>
+            <FocusTrap>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.1, ease: 'easeInOut' }}
+                className="absolute mt-1 w-full rounded-md bg-white shadow-lg z-50"
+              >
+                <ul className="bg-white dark:bg-dark-400 max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5">
+                  {searchable && (
+                    <li
+                      id="listbox-item-0"
+                      className="bg-white dark:bg-dark-500 text-gray-900 dark:text-dark-200 cursor-pointer select-none relative py-2  hover:bg-gray-50 dark:hover:bg-dark-700 border-b border-gray-100 dark:border-dark-400"
+                    >
+                      <input
+                        className="pl-3 bg-transparent w-full "
+                        value={filter}
+                        onChange={(e) => setFilter(e.currentTarget.value)}
+                        placeholder="Filter Options"
+                      />
+                    </li>
+                  )}
+                  {renderOptions()}
+                </ul>
+              </motion.div>
+            </FocusTrap>
           )}
         </AnimatePresence>
       </div>

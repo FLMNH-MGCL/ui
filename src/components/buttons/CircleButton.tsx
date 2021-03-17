@@ -1,13 +1,12 @@
-import React from "react";
-import { PropsOf } from "../../types";
-import Button from "../Button";
-import Spinner from "../Spinner";
+import React from 'react';
+import { PropsOf } from '../../types';
+import Button from '../Button';
+import Spinner from '../Spinner';
 
 type Props = {
   icon: React.ReactNode;
-  // onClick?(): void;
   loading?: boolean;
-} & PropsOf<"button">;
+} & PropsOf<'button'>;
 
 export default function CircleButton({
   icon,
