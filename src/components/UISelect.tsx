@@ -3,41 +3,26 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { SelectOption } from 'types';
+import { defined } from '../utils/util';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
 import FocusTrap from './FocusTrap';
 
-// function SelectedBadge({ label, onDelete }: SelectBadgeProps) {
-//   return (
-//     <span className="flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-gray-100 text-gray-800 hover:bg-gray-200 space-x-2 max-w-1/2 truncate">
-//       <p>{label}</p>
-
-//       <svg
-//         onClick={onDelete}
-//         className="w-3 h-3 cursor-pointer"
-//         fill="none"
-//         stroke="currentColor"
-//         viewBox="0 0 24 24"
-//         xmlns="http://www.w3.org/2000/svg"
-//       >
-//         <path
-//           strokeLinecap="round"
-//           strokeLinejoin="round"
-//           strokeWidth="2"
-//           d="M6 18L18 6M6 6l12 12"
-//         ></path>
-//       </svg>
-//     </span>
-//   );
-// }
-
 type SelectItemProps = {
   label: string;
-  selected: boolean;
+  selectedOptions: SelectOption[];
   onSelect(): void;
 };
 
-function SelectItem({ label, selected, onSelect }: SelectItemProps) {
+function SelectItem({ label, selectedOptions, onSelect }: SelectItemProps) {
+  function calculateSelected() {
+    let isPresent = selectedOptions.find((el) => el.label === label);
+
+    return isPresent ? true : false;
+  }
+
+  const isSelected = calculateSelected();
+
   return (
     <li
       id="listbox-item-0"
@@ -49,7 +34,7 @@ function SelectItem({ label, selected, onSelect }: SelectItemProps) {
         <span
           aria-label="Online"
           className={clsx(
-            selected ? 'bg-green-400' : 'bg-gray-200',
+            isSelected ? 'bg-green-400' : 'bg-gray-200',
             'flex-shrink-0 inline-block h-2 w-2 rounded-full'
           )}
         />
@@ -63,33 +48,38 @@ type UISelectProps = {
   slim?: boolean;
   multiple?: boolean;
   searchable?: boolean;
-  errors: any; // TODO: type me
-  display: SelectOption | SelectOption[] | undefined;
+  errors: any;
   options: SelectOption[];
   disabled?: boolean;
-  onSelect(item?: SelectOption): void;
-  calculateSelected(item: SelectOption): boolean;
+  selected: string | readonly string[] | number | undefined;
+  onSelectOption(item?: SelectOption): void;
   placeholder?: string;
 };
 
-export function UISelect({
+export default function UISelect({
   slim,
   multiple,
-  display,
   searchable,
-  options,
-  onSelect,
-  calculateSelected,
-  disabled,
   errors,
+  disabled,
+  options,
   placeholder,
+  selected,
+  onSelectOption,
 }: UISelectProps) {
   const [visible, { toggle, off }] = useToggle(false);
-
   const [filter, setFilter] = useState('');
 
   useKeyboard('Escape', () => {
     off();
+  });
+
+  const selectedOptions = options.filter((el) => {
+    if (Array.isArray(selected)) {
+      return selected.includes(el.value);
+    } else {
+      return selected === el.value;
+    }
   });
 
   function renderOptions() {
@@ -112,10 +102,10 @@ export function UISelect({
         return (
           <SelectItem
             key={option.label}
-            selected={calculateSelected(option)}
             label={option.label}
+            selectedOptions={selectedOptions}
             onSelect={() => {
-              onSelect(option);
+              onSelectOption(option);
 
               if (!multiple) {
                 off();
@@ -127,11 +117,50 @@ export function UISelect({
     }
   }
 
-  function truncateDisplay() {
-    // @ts-ignore: I only call this function when display is an array
-    let ret = display?.map((item) => item.label).join(', ');
+  function truncateLabelDisplay(values: readonly string[]) {
+    let labels = options
+      .filter((el) => values.includes(el.value))
+      .map((item) => item.label);
+
+    let ret = labels.join(', ');
 
     return ret.length > 25 ? ret.substring(0, 25) + '...' : ret;
+  }
+
+  function renderLabelDisplay() {
+    if (Array.isArray(selected)) {
+      return selected.length ? (
+        <p className="dark:text-dark-200">{truncateLabelDisplay(selected)}</p>
+      ) : (
+        <p className="text-gray-400 dark:text-dark-300">
+          {placeholder ?? 'Select'}
+        </p>
+      );
+    } else if (defined(selected)) {
+      let item = options.find((el) => el.value === selected);
+
+      // this should not happen in a select component:
+      // ... but it does when asyn loading options...
+      // FIXME
+      if (!item) {
+        // throw new Error(
+        //   'Attempted to select entry which does not exist in Select component'
+        // );
+        return (
+          <p className="text-gray-400 dark:text-dark-200">
+            {placeholder ?? 'Select'}
+          </p>
+        );
+      } else {
+        return <p className="dark:text-dark-200">{item.label}</p>;
+      }
+    } else {
+      return (
+        <p className="text-gray-400 dark:text-dark-300">
+          {placeholder ?? 'Select'}
+        </p>
+      );
+    }
   }
 
   return (
@@ -153,29 +182,13 @@ export function UISelect({
                 : 'bg-white dark:bg-dark-400'
             )}
           >
-            <div className="flex items-center space-x-3">
-              {Array.isArray(display) ? (
-                display.length > 0 ? (
-                  <p className="dark:text-dark-200 truncate">
-                    {truncateDisplay()}
-                  </p>
-                ) : (
-                  <p className="text-gray-400 dark:text-dark-300">
-                    {placeholder ?? 'Select'}
-                  </p>
-                )
-              ) : display ? (
-                <p className="dark:text-dark-200">{display.label}</p>
-              ) : (
-                <p className="text-gray-400 dark:text-dark-300">
-                  {placeholder ?? 'Select'}
-                </p>
-              )}
+            <div className="flex items-center space-x-3 mr-3">
+              {renderLabelDisplay()}
             </div>
             <span className="absolute inset-y-0 right-0 flex items-center pr-2">
-              {display && (
+              {!!selectedOptions.length && (
                 <svg
-                  onClick={() => onSelect(undefined)}
+                  onClick={() => onSelectOption(undefined)}
                   className="h-5 w-5 text-red-400"
                   fill="none"
                   stroke="currentColor"
@@ -221,7 +234,7 @@ export function UISelect({
                   {searchable && (
                     <li
                       id="listbox-item-0"
-                      className="bg-white dark:bg-dark-500 text-gray-900 dark:text-dark-200 cursor-pointer select-none relative py-2  hover:bg-gray-50 dark:hover:bg-dark-700 border-b border-gray-100 dark:border-dark-400"
+                      className="bg-gray-50 dark:bg-dark-500 text-gray-900 dark:text-dark-200 cursor-pointer select-none relative py-2  hover:bg-gray-50 dark:hover:bg-dark-700 border-b border-gray-100 dark:border-dark-400"
                     >
                       <input
                         className="pl-3 bg-transparent w-full "

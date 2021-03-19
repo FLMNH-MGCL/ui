@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
-import { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { SelectOption, SelectProps } from 'types';
-import { UISelect } from './UISelect';
+import { defined } from '../utils/util';
+import UISelect from './UISelect';
 
-// I do not like the way I allow controllable forms here. I need to do more research into this
 export default forwardRef<HTMLSelectElement, SelectProps>(
   (
     {
@@ -16,142 +15,75 @@ export default forwardRef<HTMLSelectElement, SelectProps>(
       multiple,
       options,
       updateControlled,
+      defaultValue,
       ...props
     },
     ref
   ) => {
-    // @ts-ignore: this will work I promise
-    const errors = props.errors && props.name && props.errors[props.name];
-
-    const [display, setDisplay] = useState<SelectOption | SelectOption[]>();
-    const [selected, setSelected] = useState<string | string[]>();
-
     const id = Math.random().toString().substr(2, 10);
 
-    useEffect(() => {
-      // TODO: test me!
-      if (multiple && props.value !== undefined && Array.isArray(props.value)) {
-        const items = props.value.map((rawItem) => {
-          const item = options.find((el) => el.value === rawItem);
-          return item;
-        });
-
-        items.forEach((item) => {
-          if (item) {
-            // @ts-ignore: this will work i promise
-            setDisplay(display ? [...display, item] : [item]);
-            setSelected(selected ? [...selected, item.value] : [item.value]);
-          }
-        });
-      } else if (
-        multiple &&
-        props.defaultValue !== undefined &&
-        Array.isArray(props.defaultValue)
-      ) {
-        const items = props.defaultValue.map((rawItem) => {
-          const item = options.find((el) => el.value === rawItem);
-          return item;
-        });
-
-        items.forEach((item) => {
-          if (item) {
-            // @ts-ignore: this will work i promise
-            setDisplay(display ? [...display, item] : [item]);
-            // FIXME:
-            setSelected(selected ? [...selected, item.value] : [item.value]);
-          }
-        });
-      } else if (props.defaultValue !== undefined) {
-        const item = options.find((el) => el.value === props.defaultValue);
-
-        if (item) {
-          setDisplay(item);
-          setSelected(item.value);
-        }
-      } else if (props.value !== undefined) {
-        const item = options.find((el) => el.value === props.value);
-
-        if (item) {
-          setDisplay(item);
-          setSelected(item.value);
-        }
-      }
-    }, []);
-
-    // I don't love this solution at all, but ref is being forwarded so can't use it
-    useEffect(() => {
-      // console.log('changed!');
-      const element = document.getElementById(id);
-      if (element) {
-        // console.log('found element', element);
-        element.dispatchEvent(new Event('change', { bubbles: true }));
-        // console.log('dispatched:', ret);
-      }
-    }, [selected]);
-
-    function handleSelection(item?: SelectOption) {
-      if (!item) {
-        updateControlled && updateControlled(undefined);
-        setSelected('');
-        setDisplay(undefined);
-        return;
+    // I am manually checking for undefineds here because entering a value
+    // of 0 would fail these ! checks
+    function initSelection() {
+      // no change really, should be undefined
+      if (!defined(props.value) && !defined(defaultValue)) {
+        return undefined;
       }
 
-      if (multiple) {
-        if (!display || !selected) {
-          setDisplay([item]);
-          setSelected([item.value]);
-          updateControlled && updateControlled([item.value]);
-        } else if (Array.isArray(display) && Array.isArray(selected)) {
-          const existing = display.find(
-            (el: SelectOption) => el.value === item.value
-          );
+      let startingValue;
 
-          if (existing) {
-            setDisplay(
-              display.filter((el: SelectOption) => el.value !== item.value)
-            );
-
-            setSelected(selected.filter((el: string) => el !== item.value));
-            updateControlled &&
-              updateControlled(
-                selected.filter((el: string) => el !== item.value)
-              );
-          } else {
-            setDisplay([...display, item]);
-            setSelected([...selected, item.value]);
-            updateControlled && updateControlled([...selected, item.value]);
-          }
+      // value always takes precedence*
+      if (defined(props.value)) {
+        if (multiple && !Array.isArray(props.value)) {
+          startingValue = [props.value as string];
+        } else {
+          startingValue = props.value;
         }
       } else {
-        updateControlled && updateControlled(item.value);
-        setDisplay(item);
+        // I checked if both were not defined above, so at this point if props.value
+        // wasn't defined then defaultValue is
+        if (multiple && !Array.isArray(defaultValue)) {
+          // I am casting to string because the type checker thought I was trying to
+          // create a readonly string[][] here.
+          startingValue = [defaultValue as string];
+        } else {
+          startingValue = defaultValue;
+        }
+      }
+
+      return startingValue;
+    }
+
+    function handleSelectUIOption(item?: SelectOption) {
+      if (!item) {
+        // clear button was selected
+        setSelected(multiple ? [] : undefined);
+      } else if (multiple && Array.isArray(selected)) {
+        let alreadySelected = selected?.includes(item.value);
+
+        if (alreadySelected) {
+          setSelected(selected.filter((el) => el !== item.value));
+        } else {
+          setSelected([...selected, item.value]);
+        }
+      } else if (selected === item.value) {
+        setSelected(undefined);
+      } else {
         setSelected(item.value);
       }
     }
 
-    function calculateSelected(item: SelectOption) {
-      if (selected === undefined || !display) {
-        return false;
-      } else if (multiple && Array.isArray(display)) {
-        if (display.some((el: SelectOption) => el.value === item.value)) {
-          return true;
-        }
-      } else if (!multiple) {
-        if (selected === item.value) {
-          return true;
-        }
-      }
+    const [selected, setSelected] = useState(initSelection());
 
-      return false;
-    }
+    // @ts-ignore: this will work I promise
+    const errors = props.errors && props.name && props.errors[props.name];
 
-    // console.log('SELECT COMP', selected);
-
-    function fakeChange() {
-      // console.log('change:', selected);
-      return selected;
-    }
+    const onChange =
+      props.onChange ??
+      function (e: React.ChangeEvent<HTMLSelectElement>) {
+        console.log(e);
+        setSelected(e.target.value);
+      };
 
     return (
       <label
@@ -162,12 +94,12 @@ export default forwardRef<HTMLSelectElement, SelectProps>(
         )}
       >
         {label}
-        <div className="mt-1 relative">
+        <div className={clsx(label && 'mt-1', 'relative')}>
           <select
             id={id}
             value={selected}
             className="hidden"
-            onChange={props.onChange ?? fakeChange}
+            onChange={onChange}
             multiple={multiple}
             ref={ref}
             {...props}
@@ -180,17 +112,16 @@ export default forwardRef<HTMLSelectElement, SelectProps>(
               </option>
             ))}
           </select>
+
           <UISelect
+            selected={selected}
             slim={slim}
-            multiple={multiple}
+            disabled={props.disabled}
             searchable={searchable}
             errors={errors}
-            display={display}
-            onSelect={handleSelection}
             options={options}
-            disabled={props.disabled}
-            calculateSelected={calculateSelected}
             placeholder={props.placeholder}
+            onSelectOption={handleSelectUIOption}
           />
         </div>
       </label>
