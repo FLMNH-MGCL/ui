@@ -62,3 +62,7 @@ definition of the component */
     box-shadow: inset 0 0 0 100vh var(--checkmark-fill-color);
   }
 }
+
+.DayPicker-Day:hover {
+  @apply text-gray-600;
+}

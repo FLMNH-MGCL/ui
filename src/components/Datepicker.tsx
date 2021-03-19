@@ -77,7 +77,7 @@ function SinglePicker({
     <label
       className={clsx(
         fullWidth && 'flex-1',
-        'block text-sm font-medium leading-5 text-gray-700'
+        'block text-sm font-medium leading-5 text-gray-700 dark:text-dark-200'
       )}
     >
       {label}
@@ -93,7 +93,7 @@ function SinglePicker({
                 transition={{ duration: 0.1, ease: 'easeInOut' }}
               >
                 <DayPicker
-                  className="absolute bg-white mt-12 rounded-md shadow z-50"
+                  className="absolute bg-white dark:bg-dark-500 dark:text-dark-200 mt-12 rounded-md shadow z-50"
                   onDayClick={handleDayClick}
                   selectedDays={value}
                 />
@@ -233,7 +233,7 @@ function RangedPicker({
     <label
       className={clsx(
         fullWidth && 'flex-1',
-        'block text-sm font-medium leading-5 text-gray-700'
+        'block text-sm font-medium leading-5 text-gray-700 dark:text-dark-200'
       )}
     >
       {label}
@@ -249,7 +249,7 @@ function RangedPicker({
               >
                 {/* @ts-ignore: it works I promise */}
                 <DayPicker
-                  className="absolute bg-white mt-12 rounded-md shadow"
+                  className="absolute bg-white dark:bg-dark-500 dark:text-dark-200  mt-12 rounded-md shadow"
                   selectedDays={[from, { from, to }]}
                   modifiers={modifiers}
                   onDayClick={handleDayClick}
