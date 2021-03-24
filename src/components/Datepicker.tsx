@@ -115,7 +115,7 @@ function SinglePicker({
 
           <div className="cursor-pointer absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
             <svg
-              className="w-4 h-4"
+              className="w-4 h-4 dark:text-dark-200"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -271,7 +271,7 @@ function RangedPicker({
 
           <div className="cursor-pointer absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
             <svg
-              className="w-4 h-4 "
+              className="w-4 h-4 dark:text-dark-200"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

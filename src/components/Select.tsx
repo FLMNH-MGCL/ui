@@ -22,6 +22,8 @@ export default forwardRef<HTMLSelectElement, SelectProps>(
   ) => {
     const id = Math.random().toString().substr(2, 10);
 
+    // TODO: add focused state to UISelect to render the ring
+
     // I am manually checking for undefineds here because entering a value
     // of 0 would fail these ! checks
     function initSelection() {
@@ -58,18 +60,25 @@ export default forwardRef<HTMLSelectElement, SelectProps>(
       if (!item) {
         // clear button was selected
         setSelected(multiple ? [] : undefined);
+        updateControlled && updateControlled(multiple ? [] : undefined);
       } else if (multiple && Array.isArray(selected)) {
         let alreadySelected = selected?.includes(item.value);
 
         if (alreadySelected) {
-          setSelected(selected.filter((el) => el !== item.value));
+          let updated = selected.filter((el) => el !== item.value);
+          setSelected(updated);
+          updateControlled && updateControlled(updated);
         } else {
-          setSelected([...selected, item.value]);
+          let updated = [...selected, item.value];
+          setSelected(updated);
+          updateControlled && updateControlled(updated);
         }
       } else if (selected === item.value) {
         setSelected(undefined);
+        updateControlled && updateControlled(undefined);
       } else {
         setSelected(item.value);
+        updateControlled && updateControlled(item.value);
       }
     }
 
@@ -78,12 +87,10 @@ export default forwardRef<HTMLSelectElement, SelectProps>(
     // @ts-ignore: this will work I promise
     const errors = props.errors && props.name && props.errors[props.name];
 
-    const onChange =
-      props.onChange ??
-      function (e: React.ChangeEvent<HTMLSelectElement>) {
-        console.log(e);
-        setSelected(e.target.value);
-      };
+    const onChange = function (e: React.ChangeEvent<HTMLSelectElement>) {
+      setSelected(e.target.value);
+      updateControlled && updateControlled(e.target.value);
+    };
 
     return (
       <label
