@@ -29,7 +29,7 @@ export default forwardRef<HTMLSelectElement, SelectProps>(
     function initSelection() {
       // no change really, should be undefined
       if (!defined(props.value) && !defined(defaultValue)) {
-        return undefined;
+        return multiple ? [] : undefined;
       }
 
       let startingValue;
@@ -127,6 +127,7 @@ export default forwardRef<HTMLSelectElement, SelectProps>(
             searchable={searchable}
             errors={errors}
             options={options}
+            multiple={multiple}
             placeholder={props.placeholder}
             onSelectOption={handleSelectUIOption}
           />
