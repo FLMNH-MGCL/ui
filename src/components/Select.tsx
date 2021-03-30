@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { forwardRef, useState } from 'react';
 import { SelectOption, SelectProps } from 'types';
 import { defined } from '../utils/util';
+import Tooltip from './Tooltip';
 import UISelect from './UISelect';
 
 export default forwardRef<HTMLSelectElement, SelectProps>(
@@ -16,6 +17,8 @@ export default forwardRef<HTMLSelectElement, SelectProps>(
       options,
       updateControlled,
       defaultValue,
+      toolTip,
+      toolTipOrigin = 'left',
       ...props
     },
     ref
@@ -100,7 +103,14 @@ export default forwardRef<HTMLSelectElement, SelectProps>(
           'block text-sm font-medium leading-5 text-gray-700 dark:text-dark-200'
         )}
       >
-        {label}
+        {toolTip ? (
+          <div className="flex justify-between">
+            <p>{label}</p>
+            <Tooltip text={toolTip} origin={toolTipOrigin} />
+          </div>
+        ) : (
+          label
+        )}
         <div className={clsx(label && 'mt-1', 'relative')}>
           <select
             id={id}

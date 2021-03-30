@@ -94,6 +94,8 @@ export type SelectProps = {
   fullWidth?: boolean;
   options: SelectOption[];
   updateControlled?(newVal: any): void;
+  toolTip?: string;
+  toolTipOrigin?: 'left' | 'right';
 } & React.ComponentPropsWithoutRef<'select'>;
 
 export type SortingConfig = {

@@ -21,27 +21,26 @@ function SinglePicker({
   initialDate,
   ...props
 }: SinglePickerProps) {
-  const [value, setValue] = useState<Date>();
+  const [value, setValue] = useState<Date | undefined>(getInitialState());
   const [dateString, setDateString] = useState(getDateString());
-
-  // const placeholder = new Date().toISOString().split('T')[0];
 
   const [visible, { on, off }] = useToggle(false);
 
-  function setInitialState() {
+  function getInitialState() {
     if (initialDate) {
       if (typeof initialDate === 'object') {
-        setValue(initialDate);
+        return initialDate;
       } else {
         try {
-          const date = new Date(initialDate);
-          setValue(date);
+          return new Date(initialDate);
         } catch {
           throw new Error(
             `Attempted to parse invalid date in DatePicker: ${initialDate}`
           );
         }
       }
+    } else {
+      return undefined;
     }
   }
 
@@ -50,20 +49,21 @@ function SinglePicker({
   }
 
   function getDateString() {
-    if (!value) {
-      return '';
+    if (!value && initialDate) {
+      if (typeof initialDate === 'string') {
+        return initialDate;
+      } else {
+        return initialDate.toISOString().split('T')[0];
+      }
     } else {
-      return value?.toISOString().split('T')[0];
+      return value?.toISOString().split('T')[0] ?? '';
     }
   }
 
   function handleResetClick() {
     setValue(undefined);
+    setDateString('');
   }
-
-  useEffect(() => {
-    setInitialState();
-  }, []);
 
   useEffect(() => {
     setDateString(getDateString());
