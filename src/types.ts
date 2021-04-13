@@ -55,6 +55,8 @@ export type InputProps = React.ComponentPropsWithoutRef<'input'> & {
   slim?: boolean;
   icon?: keyof typeof INPUT_ICONS;
   iconClick?(): void;
+  toolTip?: string;
+  toolTipOrigin?: 'left' | 'right';
 };
 
 export type FocusTrapProps = {

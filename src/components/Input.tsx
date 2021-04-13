@@ -2,9 +2,22 @@ import React from 'react';
 import clsx from 'clsx';
 import { forwardRef } from 'react';
 import { InputProps } from 'types';
+import Tooltip from './Tooltip';
 
 export default forwardRef<HTMLInputElement, InputProps>(
-  ({ label, className, fullWidth, slim, iconClick, ...props }, ref) => {
+  (
+    {
+      label,
+      className,
+      fullWidth,
+      slim,
+      iconClick,
+      toolTip,
+      toolTipOrigin,
+      ...props
+    },
+    ref
+  ) => {
     // @ts-ignore: this will work I promise
     const errors = props.errors && props.name && props.errors[props.name];
     const icon = props.icon ? INPUT_ICONS[props.icon] : null;
@@ -19,7 +32,14 @@ export default forwardRef<HTMLInputElement, InputProps>(
           'block text-sm font-medium leading-5 text-gray-700 dark:text-dark-200'
         )}
       >
-        {label}
+        {toolTip ? (
+          <div className="flex justify-between">
+            <p>{label}</p>
+            <Tooltip text={toolTip} origin={toolTipOrigin} />
+          </div>
+        ) : (
+          label
+        )}
         <div className={clsx('relative', label && 'mt-1')}>
           {icon && (
             <div
